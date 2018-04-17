@@ -16,9 +16,11 @@ before_script:
 - source $HOME/google-cloud-sdk/path.bash.inc
 jobs:
   include:
-  - stage: package
+  - stage: Build
     script: ./mvnw package
-#  - stage: docker
-#    script:
-#    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-#    - ./mvnw install -PbuildDocker
+  - stage: Containerize
+    script:
+    - if [ "$TRAVIS_SECURE_ENV_VARS" != "false" ]; then
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      fi
+    - ./mvnw install -PbuildDocker

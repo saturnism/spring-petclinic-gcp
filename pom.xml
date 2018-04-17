@@ -11,7 +11,6 @@
 
     <modules>
         <module>spring-petclinic-api-gateway</module>
-        <module>spring-petclinic-common</module>
         <module>spring-petclinic-customers-service</module>
         <module>spring-petclinic-vets-service</module>
         <module>spring-petclinic-visits-service</module>
@@ -75,11 +74,6 @@
                 <version>${spring-cloud-gcp.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.samples.petclinic.common</groupId>
-                <artifactId>spring-petclinic-common</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.assertj</groupId>
@@ -232,22 +226,20 @@
                             <executions>
                                 <execution>
                                     <id>latest</id>
-                                    <phase>package</phase>
+                                    <phase>install</phase>
                                     <goals>
                                         <goal>build</goal>
                                         <goal>tag</goal>
-                                        <goal>push</goal>
                                     </goals>
                                     <configuration>
                                         <tag>latest</tag>
                                     </configuration>
                                 </execution>
                                 <execution>
-                                    <id>install</id>
+                                    <id>tag</id>
                                     <phase>install</phase>
                                     <goals>
                                         <goal>tag</goal>
-                                        <goal>push</goal>
                                     </goals>
                                     <configuration>
                                         <tag>${project.version}-${git.commit.id.abbrev}</tag>
@@ -273,5 +265,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>

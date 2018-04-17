@@ -58,12 +58,6 @@
             <artifactId>logback-json-classic</artifactId>
         </dependency>
 
-        <!-- Common -->
-        <dependency>
-            <groupId>org.springframework.samples.petclinic.common</groupId>
-            <artifactId>spring-petclinic-common</artifactId>
-        </dependency>
-
         <!-- Third parties -->
         <dependency>
             <groupId>org.jolokia</groupId>

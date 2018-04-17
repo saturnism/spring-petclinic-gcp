@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.springframework.samples.petclinic.visits</groupId>
-	<artifactId>spring-petclinic-visits-service</artifactId>
-	<packaging>jar</packaging>
-	<description>Spring PetClinic Visits Service</description>
+    <groupId>org.springframework.samples.petclinic.visits</groupId>
+    <artifactId>spring-petclinic-visits-service</artifactId>
+    <packaging>jar</packaging>
+    <description>Spring PetClinic Visits Service</description>
 
     <parent>
         <groupId>org.springframework.samples</groupId>
@@ -19,7 +19,7 @@
         <main.class>org.springframework.samples.petclinic.visits.VisitsServiceApplication</main.class>
     </properties>
 
-	<dependencies>
+    <dependencies>
         <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -30,10 +30,10 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -58,12 +58,6 @@
             <artifactId>logback-json-classic</artifactId>
         </dependency>
 
-        <!-- Common -->
-        <dependency>
-            <groupId>org.springframework.samples.petclinic.common</groupId>
-            <artifactId>spring-petclinic-common</artifactId>
-        </dependency>
-
         <!-- Third parties -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -73,19 +67,19 @@
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
         </dependency>
-	</dependencies>
+    </dependencies>
 
     <profiles>
         <profile>
             <id>buildDocker</id>
-                <build>
-                    <plugins>
-                        <plugin>
-                            <groupId>com.spotify</groupId>
-                            <artifactId>dockerfile-maven-plugin</artifactId>
-                        </plugin>
-                    </plugins>
-                </build>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
