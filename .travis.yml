@@ -1,0 +1,24 @@
+language: java
+sudo: required
+services:
+  - docker
+jdk:
+- openjdk8
+branches:
+  only:
+  - master
+cache:
+  directories:
+  - $HOME/google-cloud-sdk
+  - $HOME/.m2
+before_script:
+- if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+- source $HOME/google-cloud-sdk/path.bash.inc
+jobs:
+  include:
+  - stage: package
+    script: ./mvnw package
+#  - stage: docker
+#    script:
+#    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#    - ./mvnw install -PbuildDocker
