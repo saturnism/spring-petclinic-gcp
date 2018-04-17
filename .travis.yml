@@ -18,17 +18,18 @@ cache:
 
 env:
 - DOCKER_GOOGLE_CREDENTIALS=$TRAVIS_BUILD_DIR/travis-ci-petclinic.json
+- CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_3cc93b35c21b_key -iv $encrypted_3cc93b35c21b_iv -in travis-ci-petclinic.json.enc -out travis-ci-petclinic.json -d
 - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then
     rm -rf $HOME/google-cloud-sdk;
-    export CLOUDSDK_CORE_DISABLE_PROMPTS=1;
     curl https://sdk.cloud.google.com | bash;
   fi
 - source $HOME/google-cloud-sdk/path.bash.inc
 - gcloud auth activate-service-account --key-file=$TRAVIS_BUILD_DIR/travis-ci-petclinic.json
 - gcloud config set core/project $PROJECT_ID
+- gcloud components install beta
 
 jobs:
   include:
@@ -36,3 +37,7 @@ jobs:
     script:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - ./mvnw install -PbuildDocker
+  - stage: Deploy
+    script:
+    - gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
+    - kubectl get pods
