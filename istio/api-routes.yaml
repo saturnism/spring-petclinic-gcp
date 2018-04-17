@@ -1,0 +1,59 @@
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: api-gateway
+spec:
+  destination:
+    name: api-gateway
+  match:
+    request:
+      headers:
+        uri:
+          prefix: /api/gateway
+  rewrite:
+    uri: /
+---
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: api-customer
+spec:
+  destination:
+    name: customers-service
+  match:
+    request:
+      headers:
+        uri:
+          prefix: /api/customer
+  rewrite:
+    uri: /
+---
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: api-vet
+spec:
+  destination:
+    name: vets-service
+  match:
+    request:
+      headers:
+        uri:
+          prefix: /api/vet
+  rewrite:
+    uri: /
+---
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: api-visit
+spec:
+  destination:
+    name: visits-service
+  match:
+    request:
+      headers:
+        uri:
+          prefix: /api/visit
+  rewrite:
+    uri: /

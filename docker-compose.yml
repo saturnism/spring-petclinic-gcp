@@ -1,0 +1,52 @@
+version: '3.6'
+secrets:
+  petclinic-credentials:
+    file: /home/docker-user/petclinic-service-account.json
+services:
+  customers-service:
+    image: saturnism/gcp-spring-petclinic-customers-service
+    container_name: customers-service
+    environment:
+    - PROJECT_ID
+    - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/petclinic-credentials
+    secrets:
+    - petclinic-credentials
+    ports:
+    - 8081:8080
+
+  visits-service:
+    image: saturnism/gcp-spring-petclinic-visits-service
+    container_name: visits-service
+    environment:
+    - PROJECT_ID
+    - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/petclinic-credentials
+    secrets:
+    - petclinic-credentials
+    ports:
+    - 8082:8080
+
+  vets-service:
+    image: saturnism/gcp-spring-petclinic-vets-service
+    container_name: vets-service
+    environment:
+    - PROJECT_ID
+    - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/petclinic-credentials
+    secrets:
+    - petclinic-credentials
+    ports:
+    - 8083:8080
+
+  api-gateway:
+    image: saturnism/gcp-spring-petclinic-api-gateway
+    container_name: api-gateway
+    links:
+     - customers-service
+     - visits-service
+     - vets-service
+    environment:
+    - PROJECT_ID
+    - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/petclinic-credentials
+    secrets:
+    - petclinic-credentials
+    ports:
+    - 8080:8080

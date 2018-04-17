@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- When running inside of Docker or Kubernetes environment, use JSON logging -->
+    <springProfile name="gcp">
+        <include resource="org/springframework/cloud/gcp/autoconfigure/logging/logback-json-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_JSON"/>
+        </root>
+    </springProfile>
+    <springProfile name="!gcp">
+        <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    </springProfile>
+    <jmxConfigurator/>
+</configuration>

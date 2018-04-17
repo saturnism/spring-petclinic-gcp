@@ -1,0 +1,354 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: petclinic
+    name: petclinic
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    selector:
+      app: api-gateway
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: api-gateway
+    name: api-gateway
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    selector:
+      app: api-gateway
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: customers-service
+    name: customers-service
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    selector:
+      app: customers-service
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: vets-service
+    name: vets-service
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    selector:
+      app: vets-service
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: visits-service
+    name: visits-service
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    selector:
+      app: visits-service
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: notfound-service
+    name: notfound-service
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    selector:
+      app: notfound-service
+
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: api-gateway
+    name: api-gateway
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: api-gateway
+    template:
+      metadata:
+        annotations:
+          prometheus.io/scrape: 'true'
+          prometheus.io/path: '/actuator/prometheus'
+          prometheus.io/port: '8080'
+        labels:
+          app: api-gateway
+      spec:
+        volumes:
+        - name: credentials
+          secret:
+            secretName: petclinic-credentials
+        containers:
+        - name: api-gateway
+          image: saturnism/gcp-spring-petclinic-api-gateway
+          readinessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/info
+          livenessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/health
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              memory: 1G
+              cpu: 1000m
+          volumeMounts:
+          - name: credentials 
+            mountPath: "/etc/credentials"
+            readOnly: true
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: gcp,production
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/credentials/petclinic-service-account.json
+          ports:
+          - name: http
+            containerPort: 8080
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: customers-service
+    name: customers-service
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: customers-service
+    template:
+      metadata:
+        annotations:
+          prometheus.io/scrape: 'true'
+          prometheus.io/path: '/actuator/prometheus'
+          prometheus.io/port: '8080'
+        labels:
+          app: customers-service
+      spec:
+        volumes:
+        - name: credentials
+          secret:
+            secretName: petclinic-credentials
+        containers:
+        - name: customers-service
+          image: saturnism/gcp-spring-petclinic-customers-service
+          readinessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/info
+          livenessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/health
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              memory: 1G
+              cpu: 1000m
+          volumeMounts:
+          - name: credentials 
+            mountPath: "/etc/credentials"
+            readOnly: true
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: gcp,production
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/credentials/petclinic-service-account.json
+          ports:
+          - name: http
+            containerPort: 8080
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: vets-service
+    name: vets-service
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: vets-service
+    template:
+      metadata:
+        annotations:
+          prometheus.io/scrape: 'true'
+          prometheus.io/path: '/actuator/prometheus'
+          prometheus.io/port: '8080'
+        labels:
+          app: vets-service
+      spec:
+        volumes:
+        - name: credentials
+          secret:
+            secretName: petclinic-credentials
+        containers:
+        - name: vets-service
+          image: saturnism/gcp-spring-petclinic-vets-service
+          readinessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/info
+          livenessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/health
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              memory: 1G
+              cpu: 1000m
+          volumeMounts:
+          - name: credentials 
+            mountPath: "/etc/credentials"
+            readOnly: true
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: gcp,production
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/credentials/petclinic-service-account.json
+          ports:
+          - name: http
+            containerPort: 8080
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: notfound-service
+    name: notfound-service
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: notfound-service
+    template:
+      metadata:
+        labels:
+          app: notfound-service
+      spec:
+        containers:
+        - name: notfound-service
+          image: gcr.io/google_containers/defaultbackend-amd64:1.4
+          ports:
+          - name: http
+            containerPort: 8080
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: visits-service
+    name: visits-service
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: visits-service
+    template:
+      metadata:
+        annotations:
+          prometheus.io/scrape: 'true'
+          prometheus.io/path: '/actuator/prometheus'
+          prometheus.io/port: '8080'
+        labels:
+          app: visits-service
+      spec:
+        volumes:
+        - name: credentials
+          secret:
+            secretName: petclinic-credentials
+        containers:
+        - name: visits-service
+          image: saturnism/gcp-spring-petclinic-visits-service
+          readinessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/info
+          livenessProbe:
+            exec:
+              command:
+              - curl
+              - http://localhost:8080/actuator/health
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              memory: 1G
+              cpu: 1000m
+          volumeMounts:
+          - name: credentials 
+            mountPath: "/etc/credentials"
+            readOnly: true
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: gcp,production
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/credentials/petclinic-service-account.json
+          ports:
+          - name: http
+            containerPort: 8080
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: petclinic-ingress
+    annotations:
+      kubernetes.io/ingress.class: istio
+  spec:
+    rules:
+    - http:
+        paths:
+        - path: /.*
+          backend:
+            serviceName: petclinic
+            servicePort: 8080
+        - path: /actuator.*
+          backend:
+            serviceName: notfound-service
+            servicePort: 8080
+        - path: /api/gateway/.*
+          backend:
+            serviceName: api-gateway
+            servicePort: 8080
+        - path: /api/customer/.*
+          backend:
+            serviceName: customers-service
+            servicePort: 8080
+        - path: /api/vet/.*
+          backend:
+            serviceName: vets-service
+            servicePort: 8080
+        - path: /api/visit/.*
+          backend:
+            serviceName: visits-service
+            servicePort: 8080
