@@ -212,10 +212,13 @@ $ gcloud iam service-accounts keys create ~/travis-ci-petclinic.json \
 
 Encrypt and Store the Travis CI/CD Service Account:
 ```
-$ travis encrypt-file ~/travis-ci-petclinic.json --add
+$ travis encrypt-file ~/travis-ci-petclinic.json
 ```
+Travis asks you to add a line to `before_install` section. Make sure it's updated.
 
 Set the Google Cloud Platform Project ID for reference in the build:
 ```
 $ travis env set PROJECT_ID $PROJECT_ID
 ```
+
+Commit `.travis.yml`
