@@ -181,3 +181,41 @@ Deploy Route Rules:
 $ kubectl apply -f istio/api-routes.yaml
 ```
 
+### Travis CI/CD
+Install the Travis CLI:
+```
+$ brew install travis
+```
+Or, follow the [Travis CLI Installation instruction](https://github.com/travis-ci/travis.rb#installation)
+
+Login to Travis
+```
+$ travis login
+```
+Or, optionally login with `travis login --github-token=...` to avoid typing password, etc.
+
+Configure Docker credentials:
+```
+$ travis env set DOCKER_USERNAME your_username
+$ travis env set DOCKER_PASSWORD your_password
+```
+
+Create a CI/CD Service Account, assign roles, and create a JSON file:
+```
+$ gcloud iam service-accounts create travis-ci --display-name "Travis CI/CD"
+$ gcloud projects add-iam-policy-binding $PROJECT_ID \
+     --member serviceAccount:travis-ci@$PROJECT_ID.iam.gserviceaccount.com \
+     --role roles/container.developer
+$ gcloud iam service-accounts keys create ~/travis-ci-petclinic.json \
+    --iam-account travis-ci@$PROJECT_ID.iam.gserviceaccount.com
+```
+
+Encrypt and Store the Travis CI/CD Service Account:
+```
+$ travis encrypt-file ~/travis-ci-petclinic.json --add
+```
+
+Set the Google Cloud Platform Project ID for reference in the build:
+```
+$ travis env set PROJECT_ID $PROJECT_ID
+```
