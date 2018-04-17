@@ -17,8 +17,6 @@ before_script:
 jobs:
   include:
   - stage: Build
-    script: ./mvnw package
-  - stage: Containerize
     script:
     - if [ "$TRAVIS_SECURE_ENV_VARS" != "false" ]; then
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin

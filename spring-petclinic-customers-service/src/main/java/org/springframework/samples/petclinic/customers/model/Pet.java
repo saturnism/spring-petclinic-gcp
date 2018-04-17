@@ -22,7 +22,6 @@ import org.springframework.cloud.gcp.data.spanner.core.mapping.Column;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.PrimaryKey;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.Table;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.petclinic.common.GoogleDateCombinedSerializer;
 
 /**
  * Simple business object representing a pet.
