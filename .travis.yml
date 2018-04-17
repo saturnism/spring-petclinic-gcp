@@ -26,7 +26,7 @@ before_install:
 - source $HOME/google-cloud-sdk/path.bash.inc
 - gcloud auth activate-service-account --key-file=$TRAVIS_BUILD_DIR/travis-ci-petclinic.json
 - gcloud config set core/project $PROJECT_ID
-- gcloud components install beta
+- gcloud components install beta kubectl
 - export DOCKER_GOOGLE_CREDENTIALS=$TRAVIS_BUILD_DIR/travis-ci-petclinic.json
 
 jobs:
