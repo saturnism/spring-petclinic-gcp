@@ -37,5 +37,5 @@ jobs:
     - ./mvnw install -PbuildDocker
   - stage: Deploy
     script:
-    - gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
+    - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
     - kubectl get pods
