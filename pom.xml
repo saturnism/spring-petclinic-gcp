@@ -237,6 +237,17 @@
                                         <tag>${docker.image.tag}</tag>
                                     </configuration>
                                 </execution>
+                                <execution>
+                                    <id>latest</id>
+                                    <phase>install</phase>
+                                    <goals>
+                                        <goal>tag</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                    <configuration>
+                                        <tag>latest</tag>
+                                    </configuration>
+                                </execution>
                             </executions>
                             <configuration>
                                 <repository>${docker.image.prefix}/gcp-${project.artifactId}</repository>
