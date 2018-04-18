@@ -28,14 +28,44 @@ before_install:
 - gcloud config set core/project $PROJECT_ID
 - gcloud components install beta kubectl
 - export DOCKER_GOOGLE_CREDENTIALS=$TRAVIS_BUILD_DIR/travis-ci-petclinic.json
+- export TRIGGER_PATTERNS_IGNORE="\.md$"
+- export TRIGGER_PATTERNS_BUILD_ALL="^pom\.xml|^\.travis.yml"
+- export TRIGGER_PATTERNS_MODULES="^spring-petclinic-"
+- export TRIGGER_PATTERNS_KUBERNETES="^kubernetes/.*\.yaml"
+- export TRIGGER_PATTERNS_ISTIO="^istio/.*\.yaml"
+- alias cl="git diff --name-only $TRAVIS_COMMIT_RANGE"
 
 jobs:
   include:
   - stage: Build
     script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - ./mvnw install -PbuildDocker
-  - stage: Deploy
+    # Print out the change list
+    - cl
+    - if [ cl | grep -q "$TRIGGER_PATTERNS_BUILD_ALL" ]; then
+        ./mvnw install -PbuildDocker
+      else
+        ./mvnw install -N
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        while read -r module ; do
+          echo "Build $module"
+          ./mvnw install -PbuildDocker -pl $module
+        done < <(cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | cut -d/ -f1 | sort | uniq | grep "$TRIGGER_PATTERNS_MODULES")
+      fi
+  - stage: Deploy Kubernetes
     script:
     - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
     - kubectl get pods
+    - if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_KUBERNETES" then;
+        echo "Deploy to Kubernetes"
+      else
+        echo "Skipping Kubernetes Deployment"
+      fi
+  - stage: Deploy Istio
+    script:
+    - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
+    - kubectl get pods
+    - if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_ISTIO" then;
+        echo "Deploy to Kubernetes"
+      else
+        echo "Skipping Kubernetes Deployment"
+      fi
