@@ -37,6 +37,7 @@
         <!-- Plugins -->
         <docker.plugin.version>1.4.0</docker.plugin.version>
         <docker.image.prefix>saturnism</docker.image.prefix>
+        <docker.image.tag>latest</docker.image.tag>
         <docker.image.exposed.port>8080</docker.image.exposed.port>
         <docker.image.dockerfile.dir>${basedir}</docker.image.dockerfile.dir>
 
@@ -225,24 +226,15 @@
                             <version>${docker.plugin.version}</version>
                             <executions>
                                 <execution>
-                                    <id>latest</id>
+                                    <id>tag</id>
                                     <phase>install</phase>
                                     <goals>
                                         <goal>build</goal>
                                         <goal>tag</goal>
+                                        <goal>push</goal>
                                     </goals>
                                     <configuration>
-                                        <tag>latest</tag>
-                                    </configuration>
-                                </execution>
-                                <execution>
-                                    <id>tag</id>
-                                    <phase>install</phase>
-                                    <goals>
-                                        <goal>tag</goal>
-                                    </goals>
-                                    <configuration>
-                                        <tag>${project.version}-${git.commit.id.abbrev}</tag>
+                                        <tag>${docker.image.tag}</tag>
                                     </configuration>
                                 </execution>
                             </executions>
