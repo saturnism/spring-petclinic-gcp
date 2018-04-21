@@ -1,5 +1,4 @@
-language: generic
-dist: trusty
+language: java
 sudo: required
 
 services:
@@ -38,7 +37,6 @@ before_install:
 - alias cl="git diff --name-only $TRAVIS_COMMIT_RANGE"
 
 script:
-- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 - echo "Changed Files:" && cl
 - |
   if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
