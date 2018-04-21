@@ -40,7 +40,7 @@ jobs:
     - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
     - echo "Changed Files:" && cl
     - |
-      if [ cl | grep -q -E "$TRIGGER_PATTERNS_BUILD_ALL" ]; then
+      if cl | grep -q -E "$TRIGGER_PATTERNS_BUILD_ALL"; then
         cl | grep -E "$TRIGGER_PATTERNS_BUILD_ALL";
         ./mvnw install -PbuildDocker -Ddocker.image.tag=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER;
       else
