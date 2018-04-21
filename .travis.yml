@@ -1,15 +1,16 @@
-dist : trusty
+language: generic
+dist: trusty
 sudo: required
 
 services:
 - docker
 
-jdk:
-- openjdk8
-
 branches:
   only:
   - master
+
+jdk:
+- openjdk8
 
 cache:
   directories:
@@ -36,50 +37,47 @@ before_install:
 - shopt -s expand_aliases
 - alias cl="git diff --name-only $TRAVIS_COMMIT_RANGE"
 
-jobs:
-  include:
-  - stage: Build
-    script:
-    - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-    # Print out the change list
-    - cl
-    - echo "TRIGGER_PATTERNS_BUILD_ALL"
-    - cl | grep "$TRIGGER_PATTERNS_BUILD_ALL"
-    - if [ cl | grep -q "$TRIGGER_PATTERNS_BUILD_ALL" ]; then
-        ./mvnw install -PbuildDocker
-      else
-        # Install Parent POM
-        ./mvnw install -N
-
-        # Login to Docker because the build will produce Docker containers
-        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
-        # First, find the modules that changed
-        cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | cut -d/ -f1 | sort | uniq | grep "$TRIGGER_PATTERNS_MODULES" > /tmp/modules_list
-        cat /tmp/modules_list
-      
-        # Only build modules that's changed. This assumes there is no inter-module interpendency
-        for MODULE in $(cat /tmp/modules_list)
-        do
-          echo "Build $MODULE"
-          ./mvnw install -PbuildDocker -pl $module
-        done
-      fi
-  - stage: Deploy Kubernetes
-    script:
-    - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
-    - kubectl get pods
-    - if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_KUBERNETES" then;
-        echo "Deploy to Kubernetes"
-      else
-        echo "Skipping Kubernetes Deployment"
-      fi
-  - stage: Deploy Istio
-    script:
-    - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
-    - kubectl get pods
-    - if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_ISTIO" then;
-        echo "Deploy to Kubernetes"
-      else
-        echo "Skipping Kubernetes Deployment"
-      fi
+script:
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+- echo "Changed Files:" && cl
+- |
+  if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    export MAVEN_PROFILE="";
+  else
+    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    export MAVEN_PROFILE="-PbuildDocker";
+  fi
+- |
+  if cl | grep -q -E "$TRIGGER_PATTERNS_BUILD_ALL"; then
+    echo "Build & Push All";
+    ./mvnw install $MAVEN_PROFILE -Ddocker.image.tag=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER;
+  else
+    cl | grep -v -E "$TRIGGER_PATTERNS_IGNORE" | cut -d/ -f1 | sort | uniq | grep -E "$TRIGGER_PATTERNS_MODULES" > /tmp/modules_list;
+    if [ -s /tmp/modules_list ]; then
+      echo "Changed Modules:" && cat /tmp/modules_list;
+      echo "Build & Push Changed Modules";
+      ./mvnw install -N;
+      for MODULE in $(cat /tmp/modules_list)
+      do
+        echo "Build & Push $MODULE";
+        ./mvnw install $MAVEN_PROFILE -pl $MODULE -Ddocker.image.tag=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER;
+      done
+    else
+      echo "Skipping Build" && cl;
+    fi
+  fi
+- CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
+- |
+  if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_KUBERNETES"; then
+    echo "Deploying to Kubernetes";
+    kubectl get pods;
+  else
+    echo "Skipping Kubernetes Deployment";
+  fi
+- |
+  if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_ISTIO"; then
+    echo "Deploying to Istio";
+    kubectl get pods;
+  else
+    echo "Skipping Istio Deployment";
+  fi
