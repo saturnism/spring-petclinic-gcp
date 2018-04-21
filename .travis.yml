@@ -42,10 +42,10 @@ script:
 - echo "Changed Files:" && cl
 - |
   if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    export MAVEN_PROFILE="";
+  else
     echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     export MAVEN_PROFILE="-PbuildDocker";
-  else
-    export MAVEN_PROFILE="";
   fi
 - |
   if cl | grep -q -E "$TRIGGER_PATTERNS_BUILD_ALL"; then
