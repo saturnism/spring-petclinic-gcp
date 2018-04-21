@@ -42,9 +42,10 @@ script:
   if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     export MAVEN_PROFILE="";
   else
-    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1;
-    export MAVEN_PROFILE="-PbuildDocker";
+    # Disable Docker Build/Push
+    # echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    # export MAVEN_PROFILE="-PbuildDocker";
   fi
 - |
   if cl | grep -q -E "$TRIGGER_PATTERNS_BUILD_ALL"; then
