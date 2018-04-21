@@ -91,6 +91,7 @@ $ cat install/kubernetes/istio-sidecar-injector.yaml | \
      ./install/kubernetes/webhook-patch-ca-bundle.sh > \
      install/kubernetes/istio-sidecar-injector-with-ca-bundle.yaml
 $ kubectl apply -f install/kubernetes/istio-sidecar-injector-with-ca-bundle.yaml
+```
 
 Enable Sidecar Injector on `default` namespace:
 ```
