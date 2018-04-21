@@ -68,6 +68,7 @@ class OwnerResource {
      */
     @GetMapping
     public Iterable<Owner> findAll() {
+        logger.info("Getting All Owners");
         return ownerRepository.findAll();
     }
 
@@ -76,6 +77,7 @@ class OwnerResource {
      */
     @PutMapping(value = "/{ownerId}")
     public Owner updateOwner(@PathVariable("ownerId") String ownerId, @Valid @RequestBody Owner ownerRequest) {
+        logger.info("Updating Owner: {}", ownerId);
         final Owner ownerModel = ownerRepository.findById(ownerId).get();
         // This is done by hand for simplicity purpose. In a real life use-case we should consider using MapStruct.
         ownerModel.setFirstName(ownerRequest.getFirstName());

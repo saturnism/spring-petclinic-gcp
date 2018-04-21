@@ -2,6 +2,8 @@ spring:
   sleuth:
     sampler:
       probability: 1.0
+    web:
+      additional-skip-pattern: /actuator/.*
   cloud:
     gcp:
       spanner:

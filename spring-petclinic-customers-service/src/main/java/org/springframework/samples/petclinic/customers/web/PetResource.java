@@ -67,6 +67,7 @@ class PetResource {
         @RequestBody PetRequest petRequest,
         @PathVariable("ownerId") String ownerId) {
 
+    	logger.info("New Pet for Owner: {}", ownerId);
         final Owner owner = ownerRepository.findById(ownerId).get();
         final Pet pet = new Pet();
         pet.setOwnerId(owner.getId());
