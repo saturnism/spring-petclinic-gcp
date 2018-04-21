@@ -55,16 +55,16 @@ jobs:
             echo "Build & Push $MODULE";
             ./mvnw install -PbuildDocker -pl $MODULE;
           done
+        else
+          echo "Skipping Build" && cl;
         fi
-      else
-        echo "No changes triggering a build" && cl;
       fi
   - stage: Deploy Kubernetes
     script:
     - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
     - kubectl get pods
     - |
-      if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_KUBERNETES"; then
+      if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_KUBERNETES"; then
         echo "Deploy to Kubernetes";
       else
         echo "Skipping Kubernetes Deployment";
@@ -74,8 +74,8 @@ jobs:
     - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
     - kubectl get pods
     - |
-      if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_ISTIO"; then
-        echo "Deploy to Kubernetes";
+      if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_ISTIO"; then
+        echo "Deploy to Istio";
       else
-        echo "Skipping Kubernetes Deployment";
+        echo "Skipping Istio Deployment";
       fi
