@@ -17,6 +17,8 @@ package org.springframework.samples.petclinic.customers.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.customers.model.Owner;
 import org.springframework.samples.petclinic.customers.model.OwnerRepository;
@@ -38,6 +40,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class OwnerResource {
+    static private final Logger logger = LoggerFactory.getLogger(OwnerResource.class);
 
     private final OwnerRepository ownerRepository;
 
@@ -56,6 +59,7 @@ class OwnerResource {
      */
     @GetMapping(value = "/{ownerId}")
     public Owner findOwner(@PathVariable("ownerId") String ownerId) {
+        logger.info("Getting Owner ID: {}", ownerId);
         return ownerRepository.findById(ownerId).get();
     }
 

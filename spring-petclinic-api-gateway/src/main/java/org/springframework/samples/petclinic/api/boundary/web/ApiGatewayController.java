@@ -16,6 +16,8 @@
 package org.springframework.samples.petclinic.api.boundary.web;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.api.application.CustomersServiceClient;
 import org.springframework.samples.petclinic.api.application.OwnerDetails;
@@ -37,6 +39,7 @@ import static java.util.Collections.emptyList;
 @RestController
 @RequiredArgsConstructor
 public class ApiGatewayController {
+	static private final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
 
     private final CustomersServiceClient customersServiceClient;
 
@@ -44,7 +47,10 @@ public class ApiGatewayController {
 
     @GetMapping(value = "owners/{ownerId}")
     public OwnerDetails getOwnerDetails(final @PathVariable String ownerId) {
+        logger.info("Getting Owner: {}", ownerId);
         final OwnerDetails owner = customersServiceClient.getOwner(ownerId);
+
+        logger.info("Getting Pets for Owner: {}", ownerId);
         supplyVisits(owner, visitsServiceClient.getVisitsForPets(owner.getPetIds(), ownerId));
         return owner;
     }

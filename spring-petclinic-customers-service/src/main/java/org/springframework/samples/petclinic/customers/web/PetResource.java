@@ -17,6 +17,8 @@ package org.springframework.samples.petclinic.customers.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.customers.model.*;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class PetResource {
+    static private final Logger logger = LoggerFactory.getLogger(PetResource.class);
 
     private final PetRepository petRepository;
 
@@ -50,6 +53,8 @@ class PetResource {
     @GetMapping("/owners/{ownerId}/pets")
     public List<PetDetails> listPets(
             @PathVariable("ownerId") String ownerId) {
+
+        logger.info("Getting Pets for Owner: {}", ownerId);
         Owner owner = ownerRepository.findById(ownerId).get();
     	List<Pet> pets = petRepository.findByOwnerId(ownerId);
     	return pets.stream().map(pet -> new PetDetails(owner, pet))
@@ -87,6 +92,7 @@ class PetResource {
 
     @GetMapping("owners/{ownerId}/pets/{petId}")
     public PetDetails findPet(@PathVariable("ownerId") String ownerId, @PathVariable("petId") String petId) {
+        logger.info("Getting Pet for Owner: {}, Pet: {}", ownerId, petId);
         Owner owner = ownerRepository.findById(ownerId).get();
         Pet pet = petRepository.findById(new String[]{ownerId, petId}).get();
         return new PetDetails(owner, pet);
