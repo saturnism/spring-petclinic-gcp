@@ -38,20 +38,19 @@ jobs:
   - stage: Build
     script:
     - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-    - cl
-    - echo "TRIGGER_PATTERNS_BUILD_ALL"
-    - cl | grep "$TRIGGER_PATTERNS_BUILD_ALL"
-    - if [ cl | grep -q "$TRIGGER_PATTERNS_BUILD_ALL" ]; then
-        ./mvnw install -PbuildDocker
+    - echo "Changed Files:" && cl
+    - if [ cl | grep -q -E "$TRIGGER_PATTERNS_BUILD_ALL" ]; then
+        cl | grep -E "$TRIGGER_PATTERNS_BUILD_ALL"
+        ./mvnw install -PbuildDocker -Ddocker.image.tag=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
       else
         ./mvnw install -N
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | cut -d/ -f1 | sort | uniq | grep "$TRIGGER_PATTERNS_MODULES" > /tmp/modules_list
-        cat /tmp/modules_list
+        cl | grep -v -E "$TRIGGER_PATTERNS_IGNORE" | cut -d/ -f1 | sort | uniq | grep -E "$TRIGGER_PATTERNS_MODULES" > /tmp/modules_list
+        echo "Changed Modules:" && cat /tmp/modules_list
         for MODULE in $(cat /tmp/modules_list)
         do
-          echo "Build $MODULE"
-          ./mvnw install -PbuildDocker -pl $module
+          echo "Build & Push $MODULE"
+          ./mvnw install -PbuildDocker -pl $MODULE
         done
       fi
   - stage: Deploy Kubernetes
