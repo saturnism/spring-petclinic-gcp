@@ -8,10 +8,6 @@ services:
 jdk:
 - openjdk8
 
-branches:
-  only:
-  - master
-
 cache:
   directories:
   - $HOME/google-cloud-sdk
