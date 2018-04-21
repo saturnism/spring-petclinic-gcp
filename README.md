@@ -82,7 +82,7 @@ Update Sidecar Injector to limit Istio to 10.0.0.0/8 network:
 
 Install Sidecar Injector:
 ```
-$ istio-$ISTO_VERSION/install/kubernetes/webhook-create-signed-cert.sh \
+$ install/kubernetes/webhook-create-signed-cert.sh \
     --service istio-sidecar-injector \
     --namespace istio-system \
     --secret sidecar-injector-certs
