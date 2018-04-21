@@ -34,14 +34,14 @@ import static java.util.stream.Collectors.groupingBy;
 @RequiredArgsConstructor
 public class VisitsServiceClient {
 
-    private final RestTemplate loadBalancedRestTemplate;
+    private final RestTemplate restTemplate;
 
     public Map<String, List<VisitDetails>> getVisitsForPets(final List<String> petIds, final String ownerId) {
         //TODO:  expose batch interface in Visit Service
         final ParameterizedTypeReference<List<VisitDetails>> responseType = new ParameterizedTypeReference<List<VisitDetails>>() {
         };
         return petIds.parallelStream()
-            .flatMap(petId -> loadBalancedRestTemplate.exchange("http://visits-service:8080/owners/{ownerId}/pets/{petId}/visits", HttpMethod.GET, null,
+            .flatMap(petId -> restTemplate.exchange("http://visits-service:8080/owners/{ownerId}/pets/{petId}/visits", HttpMethod.GET, null,
                 responseType, ownerId, petId).getBody().stream())
             .collect(groupingBy(VisitDetails::getPetId));
     }

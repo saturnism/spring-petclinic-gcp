@@ -17,8 +17,14 @@ package org.springframework.samples.petclinic.api.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * @author Maciej Szarlinski
@@ -27,9 +33,17 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class CustomersServiceClient {
 
-    private final RestTemplate loadBalancedRestTemplate;
+    private final RestTemplate restTemplate;
 
     public OwnerDetails getOwner(final String ownerId) {
-        return loadBalancedRestTemplate.getForObject("http://customers-service:8080/owners/{ownerId}", OwnerDetails.class, ownerId);
+        OwnerDetails owner = restTemplate.getForObject("http://customers-service:8080/owners/{ownerId}", OwnerDetails.class, ownerId);
+
+        ResponseEntity<List<PetDetails>> petsResponse = restTemplate.exchange("http://customers-service:8080/owners/{ownerId}/pets",
+                HttpMethod.GET, HttpEntity.EMPTY,
+                new ParameterizedTypeReference<List<PetDetails>>() {},
+                ownerId);
+
+        owner.setPets(petsResponse.getBody());
+        return owner;
     }
 }

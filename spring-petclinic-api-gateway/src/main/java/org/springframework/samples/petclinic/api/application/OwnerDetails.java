@@ -29,19 +29,19 @@ import static java.util.stream.Collectors.toList;
 @Data
 public class OwnerDetails {
 
-    private final String id;
+    private String id;
 
-    private final String firstName;
+    private String firstName;
 
-    private final String lastName;
+    private String lastName;
 
-    private final String address;
+    private String address;
 
-    private final String city;
+    private String city;
 
-    private final String telephone;
+    private String telephone;
 
-    private final List<PetDetails> pets = new ArrayList<>();
+    private List<PetDetails> pets = new ArrayList<>();
 
     @JsonIgnore
     public List<String> getPetIds() {
