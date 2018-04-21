@@ -1,4 +1,5 @@
-dist : trusty
+language: generic
+dist: trusty
 sudo: required
 
 services:
@@ -41,24 +42,16 @@ jobs:
   - stage: Build
     script:
     - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-    # Print out the change list
     - cl
     - echo "TRIGGER_PATTERNS_BUILD_ALL"
     - cl | grep "$TRIGGER_PATTERNS_BUILD_ALL"
     - if [ cl | grep -q "$TRIGGER_PATTERNS_BUILD_ALL" ]; then
         ./mvnw install -PbuildDocker
       else
-        # Install Parent POM
         ./mvnw install -N
-
-        # Login to Docker because the build will produce Docker containers
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
-        # First, find the modules that changed
         cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | cut -d/ -f1 | sort | uniq | grep "$TRIGGER_PATTERNS_MODULES" > /tmp/modules_list
         cat /tmp/modules_list
-      
-        # Only build modules that's changed. This assumes there is no inter-module interpendency
         for MODULE in $(cat /tmp/modules_list)
         do
           echo "Build $MODULE"
