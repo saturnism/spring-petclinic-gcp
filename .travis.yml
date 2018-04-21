@@ -43,6 +43,7 @@ script:
     export MAVEN_PROFILE="";
   else
     echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1;
     export MAVEN_PROFILE="-PbuildDocker";
   fi
 - |
@@ -64,18 +65,17 @@ script:
       echo "Skipping Build" && cl;
     fi
   fi
-- CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
 - |
   if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_KUBERNETES"; then
     echo "Deploying to Kubernetes";
-    kubectl get pods;
+    kubectl apply -f kubernetes/
   else
     echo "Skipping Kubernetes Deployment";
   fi
 - |
   if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_ISTIO"; then
     echo "Deploying to Istio";
-    kubectl get pods;
+    kubectl apply -f istio/
   else
     echo "Skipping Istio Deployment";
   fi
