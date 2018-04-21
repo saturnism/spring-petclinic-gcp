@@ -39,36 +39,43 @@ jobs:
     script:
     - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
     - echo "Changed Files:" && cl
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
     - |
       if cl | grep -q -E "$TRIGGER_PATTERNS_BUILD_ALL"; then
-        cl | grep -E "$TRIGGER_PATTERNS_BUILD_ALL";
+        echo "Build & Push All"
         ./mvnw install -PbuildDocker -Ddocker.image.tag=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER;
       else
-        ./mvnw install -N;
-        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
         cl | grep -v -E "$TRIGGER_PATTERNS_IGNORE" | cut -d/ -f1 | sort | uniq | grep -E "$TRIGGER_PATTERNS_MODULES" > /tmp/modules_list;
-        echo "Changed Modules:" && cat /tmp/modules_list;
-        for MODULE in $(cat /tmp/modules_list)
-        do
-          echo "Build & Push $MODULE";
-          ./mvnw install -PbuildDocker -pl $MODULE;
-        done
+        if [ -s /tmp/modules_list ]; then
+          echo "Changed Modules:" && cat /tmp/modules_list;
+          echo "Build & Push Changed Modules"
+          ./mvnw install -N;
+          for MODULE in $(cat /tmp/modules_list)
+          do
+            echo "Build & Push $MODULE";
+            ./mvnw install -PbuildDocker -pl $MODULE;
+          done
+        fi
+      else
+        echo "No changes triggering a build" && cl;
       fi
   - stage: Deploy Kubernetes
     script:
     - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
     - kubectl get pods
-    - if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_KUBERNETES" then;
-        echo "Deploy to Kubernetes"
+    - |
+      if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_KUBERNETES"; then
+        echo "Deploy to Kubernetes";
       else
-        echo "Skipping Kubernetes Deployment"
+        echo "Skipping Kubernetes Deployment";
       fi
   - stage: Deploy Istio
     script:
     - CLOUDSDK_CONTAINER_USE_V1_API=false gcloud beta container clusters get-credentials petclinic-cluster --region=us-central1
     - kubectl get pods
-    - if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_ISTIO" then;
-        echo "Deploy to Kubernetes"
+    - |
+      if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q "$TRIGGER_PATTERNS_ISTIO"; then
+        echo "Deploy to Kubernetes";
       else
-        echo "Skipping Kubernetes Deployment"
+        echo "Skipping Kubernetes Deployment";
       fi
