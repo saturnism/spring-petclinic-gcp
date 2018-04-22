@@ -15,6 +15,7 @@ cache:
   directories:
   - $HOME/google-cloud-sdk
   - $HOME/.m2
+  - $HOME/spring-cloud-gcp
 
 before_install:
 - export CLOUDSDK_CORE_DISABLE_PROMPTS=1
@@ -35,8 +36,10 @@ before_install:
 - export TRIGGER_PATTERNS_ISTIO="^istio/.*\.yaml"
 - shopt -s expand_aliases
 - alias cl="git diff --name-only $TRAVIS_COMMIT_RANGE"
-- git clone https://github.com/saturnism/spring-cloud-gcp.git $HOME/spring-cloud-gcp && pushd $HOME/spring-cloud-gcp && git checkout 128-bit-trace-id && ./mvnw -DskipTests install && popd
-
+- if [ ! -d "$HOME/spring-cloud-gcp" ]; then
+    git clone https://github.com/saturnism/spring-cloud-gcp.git $HOME/spring-cloud-gcp;
+  fi
+- pushd $HOME/spring-cloud-gcp && git checkout 128-bit-trace-id && git pull && ./mvnw -DskipTests install && popd
 script:
 - echo "Build Spring Cloud GCP Snapshot"
 - echo "Changed Files:" && cl

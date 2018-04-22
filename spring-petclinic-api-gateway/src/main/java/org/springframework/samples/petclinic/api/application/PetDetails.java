@@ -29,7 +29,6 @@ import java.util.List;
 public class PetDetails {
     private String ownerId;
 
-    @JsonProperty("petId")
     private String id;
 
     private final String name;
@@ -40,4 +39,13 @@ public class PetDetails {
 
     private final List<VisitDetails> visits = new ArrayList<>();
 
+    @JsonProperty("id")
+    public String getId() {
+        return id;
+    }
+
+    @JsonProperty("petId")
+    public void setId(String id) {
+        this.id = id;
+    }
 }

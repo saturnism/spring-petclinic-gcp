@@ -31,7 +31,8 @@ angular.module('petForm')
             var id = self.pet.id || 0;
 
             var data = {
-                id: id,
+                ownerId: ownerId,
+                petId: id,
                 name: self.pet.name,
                 birthDate: self.pet.birthDate,
                 type: self.pet.type
@@ -45,7 +46,7 @@ angular.module('petForm')
             }
 
             req.then(function () {
-                $state.go("owners", {ownerId: ownerId});
+                $state.go("ownerDetails", {ownerId: ownerId});
             }, function (response) {
                 var error = response.data;
                 error.errors = error.errors || [];

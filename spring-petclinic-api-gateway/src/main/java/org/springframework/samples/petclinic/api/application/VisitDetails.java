@@ -28,10 +28,19 @@ public class VisitDetails {
 
     private String petId;
 
-    @JsonProperty("visitId")
     private String id;
 
     private final String date;
 
     private final String description;
+
+    @JsonProperty("id")
+    public String getId() {
+        return id;
+    }
+
+    @JsonProperty("visitId")
+    public void setId(String id) {
+        this.id = id;
+    }
 }

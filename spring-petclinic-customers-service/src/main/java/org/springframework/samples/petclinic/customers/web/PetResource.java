@@ -85,7 +85,7 @@ class PetResource {
     private void save(final Pet pet, final PetRequest petRequest) {
         pet.setName(petRequest.getName());
         pet.setBirthDate(petRequest.getBirthDate());
-        pet.setType(petRequest.getTypeId());
+        pet.setType(petRequest.getType());
 
         log.info("Saving pet {}", pet);
         petRepository.save(pet);
