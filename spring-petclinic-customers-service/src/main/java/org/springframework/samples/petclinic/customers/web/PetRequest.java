@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.customers.web;
 import java.util.Date;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -29,7 +31,9 @@ import org.springframework.samples.petclinic.customers.model.PetType;
  */
 @Data
 class PetRequest {
+	@NotEmpty
 	private String ownerId;
+
     private String petId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -38,5 +42,6 @@ class PetRequest {
     @Size(min = 1)
     private String name;
 
-    private PetType typeId;
+    @NotNull
+    private PetType type;
 }

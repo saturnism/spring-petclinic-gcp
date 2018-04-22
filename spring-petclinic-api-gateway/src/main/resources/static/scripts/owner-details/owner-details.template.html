@@ -53,15 +53,16 @@
                     <td>{{visit.date | date:'yyyy MMM dd'}}</td>
                     <td>{{visit.description}}</td>
                 </tr>
-                <tr>
-                    <td>
-                        <a ui-sref="petEdit({ownerId: $ctrl.owner.id, petId: pet.id})">Edit Pet</a>
-                    </td>
-                    <td>
-                        <a ui-sref="visits({ownerId: $ctrl.owner.id, petId: pet.id})">Add Visit</a>
-                    </td>
-                </tr>
             </table>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
+            <a href ng-click="$ctrl.deletePet($ctrl.owner.id, pet.id)">Delete Pet</a> |
+            <a ui-sref="petEdit({ownerId: $ctrl.owner.id, petId: pet.id})">Edit Pet</a>
+        </td>
+        <td>
+            <a ui-sref="visits({ownerId: $ctrl.owner.id, petId: pet.id})">Add Visit</a>
         </td>
     </tr>
 </table>

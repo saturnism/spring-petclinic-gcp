@@ -10,9 +10,9 @@ CREATE TABLE owners (
 CREATE TABLE pets (
     owner_id STRING(36) NOT NULL,
     pet_id STRING(36) NOT NULL,
-    name STRING(128),
-    birth_date DATE,
-    type STRING(16)
+    name STRING(128) NOT NULL,
+    birth_date DATE NOT NULL,
+    type STRING(16) NOT NULL
 ) PRIMARY KEY (owner_id, pet_id),
   INTERLEAVE IN PARENT owners ON DELETE CASCADE;
 
@@ -20,7 +20,7 @@ CREATE TABLE vets (
     vet_id STRING(36) NOT NULL,
     first_name STRING(128) NOT NULL,
     last_name STRING(128) NOT NULL,
-    specialties ARRAY<STRING(32)>
+    specialties ARRAY<STRING(32)> NOT NULL
 ) PRIMARY KEY (vet_id);
 
 CREATE INDEX vets_by_last_name ON vets(last_name);
@@ -29,8 +29,8 @@ CREATE TABLE visits (
     owner_id STRING(36) NOT NULL,
     pet_id STRING(36) NOT NULL,
     visit_id STRING(36) NOT NULL,
-    date DATE,
-    description STRING(MAX)
+    date DATE NOT NULL,
+    description STRING(MAX) NOT NULL
 ) PRIMARY KEY (owner_id, pet_id, visit_id),
   INTERLEAVE IN PARENT pets ON DELETE CASCADE;
 
