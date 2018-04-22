@@ -120,8 +120,8 @@ items:
             initialDelaySeconds: 30
           resources:
             requests:
-              memory: 1G
-              cpu: 1000m
+              memory: 256m
+              cpu: 200m
           volumeMounts:
           - name: credentials 
             mountPath: "/etc/credentials"
@@ -174,8 +174,8 @@ items:
             initialDelaySeconds: 30
           resources:
             requests:
-              memory: 1G
-              cpu: 1000m
+              memory: 256m
+              cpu: 200m
           volumeMounts:
           - name: credentials 
             mountPath: "/etc/credentials"
@@ -228,8 +228,8 @@ items:
             initialDelaySeconds: 30
           resources:
             requests:
-              memory: 1G
-              cpu: 1000m
+              memory: 256m
+              cpu: 200m
           volumeMounts:
           - name: credentials 
             mountPath: "/etc/credentials"
@@ -304,8 +304,8 @@ items:
             initialDelaySeconds: 30
           resources:
             requests:
-              memory: 1G
-              cpu: 1000m
+              memory: 256m
+              cpu: 200m
           volumeMounts:
           - name: credentials 
             mountPath: "/etc/credentials"

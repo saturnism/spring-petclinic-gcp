@@ -51,12 +51,14 @@ public class ApiGatewayController {
         final OwnerDetails owner = customersServiceClient.getOwner(ownerId);
 
         logger.info("Getting Pets for Owner: {}", ownerId);
-        supplyVisits(owner, visitsServiceClient.getVisitsForPets(owner.getPetIds(), ownerId));
+        supplyVisits(owner, visitsServiceClient.getVisitsForPets(owner.getPets(), ownerId));
         return owner;
     }
 
     private void supplyVisits(final OwnerDetails owner, final Map<String, List<VisitDetails>> visitsMapping) {
         owner.getPets().forEach(pet ->
-            pet.getVisits().addAll(Optional.ofNullable(visitsMapping.get(pet.getId())).orElse(emptyList())));
+            pet.getVisits().addAll(
+                    Optional.ofNullable(visitsMapping.get(pet.getPetId()))
+                            .orElse(emptyList())));
     }
 }

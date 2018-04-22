@@ -29,6 +29,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 /**
  * @author Maciej Szarlinski
+ * @author Ray Tsang
  */
 @Component
 @RequiredArgsConstructor
@@ -36,13 +37,13 @@ public class VisitsServiceClient {
 
     private final RestTemplate restTemplate;
 
-    public Map<String, List<VisitDetails>> getVisitsForPets(final List<String> petIds, final String ownerId) {
+    public Map<String, List<VisitDetails>> getVisitsForPets(final List<PetDetails> pets, final String ownerId) {
         //TODO:  expose batch interface in Visit Service
         final ParameterizedTypeReference<List<VisitDetails>> responseType = new ParameterizedTypeReference<List<VisitDetails>>() {
         };
-        return petIds.parallelStream()
-            .flatMap(petId -> restTemplate.exchange("http://visits-service:8080/owners/{ownerId}/pets/{petId}/visits", HttpMethod.GET, null,
-                responseType, ownerId, petId).getBody().stream())
+        return pets.parallelStream()
+            .flatMap(pet -> restTemplate.exchange("http://visits-service:8080/owners/{ownerId}/pets/{petId}/visits", HttpMethod.GET, null,
+                responseType, ownerId, pet.getPetId()).getBody().stream())
             .collect(groupingBy(VisitDetails::getPetId));
     }
 }

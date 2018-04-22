@@ -45,7 +45,7 @@ public class Visit {
 
     @PrimaryKey(keyOrder = 3)
 	@Column(name = "visit_id")
-    private String vistId;
+    private String visitId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;

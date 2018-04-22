@@ -45,7 +45,7 @@ public class VisitsServiceApplication {
                 Visit visit = new Visit();
                 visit.setOwnerId("1");
                 visit.setPetId("1");
-                visit.setVistId("1");
+                visit.setVisitId("1");
                 visit.setDate(Date.from(Instant.parse("2017-12-25T00:00:00Z")));
                 visit.setDescription("Take a quick look!");
                 visitRepository.save(visit);

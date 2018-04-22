@@ -22,11 +22,13 @@ import java.util.List;
 
 /**
  * @author Maciej Szarlinski
+ * @author Ray Tsang
  */
 @Data
 public class PetDetails {
+    private String ownerId;
 
-    private final String id;
+    private String petId;
 
     private final String name;
 

@@ -42,11 +42,4 @@ public class OwnerDetails {
     private String telephone;
 
     private List<PetDetails> pets = new ArrayList<>();
-
-    @JsonIgnore
-    public List<String> getPetIds() {
-        return pets.stream()
-            .map(PetDetails::getId)
-            .collect(toList());
-    }
 }

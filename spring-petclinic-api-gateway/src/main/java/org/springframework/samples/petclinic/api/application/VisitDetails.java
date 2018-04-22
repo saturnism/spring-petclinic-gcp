@@ -19,13 +19,15 @@ import lombok.Data;
 
 /**
  * @author Maciej Szarlinski
+ * @author Ray Tsang
  */
 @Data
 public class VisitDetails {
+    private String ownerId;
 
-    private final String id;
+    private String petId;
 
-    private final String petId;
+    private String visitId;
 
     private final String date;
 

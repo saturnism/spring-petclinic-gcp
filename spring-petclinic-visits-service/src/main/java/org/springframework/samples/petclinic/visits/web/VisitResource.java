@@ -49,7 +49,7 @@ public class VisitResource {
 
     	visit.setOwnerId(ownerId);
         visit.setPetId(petId);
-        visit.setVistId(UUID.randomUUID().toString());
+        visit.setVisitId(UUID.randomUUID().toString());
         log.info("Saving visit {}", visit);
         visitRepository.save(visit);
     }
