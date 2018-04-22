@@ -18,7 +18,6 @@ package org.springframework.samples.petclinic.vets.model;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.Column;
-import org.springframework.cloud.gcp.data.spanner.core.mapping.ColumnInnerType;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.PrimaryKey;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.Table;
 
@@ -52,6 +51,5 @@ public class Vet {
     private String lastName;
 
     @Column(name = "specialties")
-	@ColumnInnerType(innerType = Specialty.class)
     private List<Specialty> specialties;
 }

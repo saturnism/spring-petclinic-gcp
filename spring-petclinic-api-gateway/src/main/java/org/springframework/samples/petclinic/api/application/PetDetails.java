@@ -32,7 +32,7 @@ public class PetDetails {
 
     private final String birthDate;
 
-    private final PetType type;
+    private final String type;
 
     private final List<VisitDetails> visits = new ArrayList<>();
 
