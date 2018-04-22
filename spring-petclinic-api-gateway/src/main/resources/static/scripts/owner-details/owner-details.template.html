@@ -32,6 +32,8 @@
 <table class="table table-striped">
     <tr ng-repeat="pet in $ctrl.owner.pets track by pet.id">
         <td valign="top">
+            <a href ng-click="$ctrl.deletePet($ctrl.owner.id, pet.id)">Delete Pet</a> |
+            <a ui-sref="petEdit({ownerId: $ctrl.owner.id, petId: pet.id})">Edit Pet</a>
             <dl class="dl-horizontal">
                 <dt>Name</dt>
                 <dd><a ui-sref="petEdit({ownerId: $ctrl.owner.id, petId: pet.id})">{{pet.name}}</a></dd>
@@ -42,6 +44,7 @@
             </dl>
         </td>
         <td valign="top">
+            <a ui-sref="visits({ownerId: $ctrl.owner.id, petId: pet.id})">Add Visit</a>
             <table class="table-condensed">
                 <thead>
                 <tr>
@@ -54,15 +57,6 @@
                     <td>{{visit.description}}</td>
                 </tr>
             </table>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">
-            <a href ng-click="$ctrl.deletePet($ctrl.owner.id, pet.id)">Delete Pet</a> |
-            <a ui-sref="petEdit({ownerId: $ctrl.owner.id, petId: pet.id})">Edit Pet</a>
-        </td>
-        <td>
-            <a ui-sref="visits({ownerId: $ctrl.owner.id, petId: pet.id})">Add Visit</a>
         </td>
     </tr>
 </table>
