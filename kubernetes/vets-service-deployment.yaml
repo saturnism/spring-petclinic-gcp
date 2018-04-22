@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vets-service
+  name: vets-service
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: vets-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vets-service
+  name: vets-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vets-service
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/actuator/prometheus'
+        prometheus.io/port: '8080'
+      labels:
+        app: vets-service
+    spec:
+      volumes:
+      - name: credentials
+        secret:
+          secretName: petclinic-credentials
+      containers:
+      - name: vets-service
+        image: saturnism/gcp-spring-petclinic-vets-service:latest
+        readinessProbe:
+          exec:
+            command:
+            - curl
+            - http://localhost:8080/actuator/info
+        livenessProbe:
+          exec:
+            command:
+            - curl
+            - http://localhost:8080/actuator/health
+          initialDelaySeconds: 30
+        resources:
+          requests:
+            memory: 256m
+            cpu: 200m
+        volumeMounts:
+        - name: credentials 
+          mountPath: "/etc/credentials"
+          readOnly: true
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: gcp,production
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/credentials/petclinic-service-account.json
+        ports:
+        - name: http
+          containerPort: 8080

@@ -174,12 +174,12 @@ $ kubectl create secret generic petclinic-credentials --from-file=$HOME/petclini
 
 Deploy Application:
 ```
-$ kubectl apply -f kubernetes/petclinic.yaml
+$ kubectl apply -f kubernetes/
 ```
 
 Deploy Route Rules:
 ```
-$ kubectl apply -f istio/api-routes.yaml
+$ kubectl apply -f istio/
 ```
 
 ### Travis CI/CD

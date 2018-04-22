@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: notfound-service
+  name: notfound-service
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: notfound-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: notfound-service
+  name: notfound-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notfound-service
+  template:
+    metadata:
+      labels:
+        app: notfound-service
+    spec:
+      containers:
+      - name: notfound-service
+        image: gcr.io/google_containers/defaultbackend-amd64:1.4
+        ports:
+        - name: http
+          containerPort: 8080
