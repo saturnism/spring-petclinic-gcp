@@ -58,7 +58,7 @@ public class ApiGatewayController {
     private void supplyVisits(final OwnerDetails owner, final Map<String, List<VisitDetails>> visitsMapping) {
         owner.getPets().forEach(pet ->
             pet.getVisits().addAll(
-                    Optional.ofNullable(visitsMapping.get(pet.getPetId()))
+                    Optional.ofNullable(visitsMapping.get(pet.getId()))
                             .orElse(emptyList())));
     }
 }

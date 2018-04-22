@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.api.application;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -28,7 +29,8 @@ import java.util.List;
 public class PetDetails {
     private String ownerId;
 
-    private String petId;
+    @JsonProperty("petId")
+    private String id;
 
     private final String name;
 

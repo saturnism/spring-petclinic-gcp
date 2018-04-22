@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.api.application;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -27,7 +28,8 @@ public class VisitDetails {
 
     private String petId;
 
-    private String visitId;
+    @JsonProperty("visitId")
+    private String id;
 
     private final String date;
 

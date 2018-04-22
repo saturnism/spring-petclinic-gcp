@@ -43,7 +43,7 @@ public class VisitsServiceClient {
         };
         return pets.parallelStream()
             .flatMap(pet -> restTemplate.exchange("http://visits-service:8080/owners/{ownerId}/pets/{petId}/visits", HttpMethod.GET, null,
-                responseType, ownerId, pet.getPetId()).getBody().stream())
+                responseType, ownerId, pet.getId()).getBody().stream())
             .collect(groupingBy(VisitDetails::getPetId));
     }
 }
