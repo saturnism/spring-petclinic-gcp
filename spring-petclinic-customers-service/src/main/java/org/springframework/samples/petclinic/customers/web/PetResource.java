@@ -76,10 +76,22 @@ class PetResource {
         save(pet, petRequest);
     }
 
+    /**
+     * Delete a Pet
+     */
+    @DeleteMapping("/owners/{ownerId}/pets/{petId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePet(@PathVariable("ownerId") String ownerId, @PathVariable("petId") String petId) {
+        logger.info("Deleting Pet for Owner: {}, Pet: {}", ownerId, petId);
+        petRepository.deleteById(new String[]{ownerId, petId});
+    }
+
     @PutMapping("/owners/{ownerId}/pets/{petId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void processUpdateForm(@RequestBody PetRequest petRequest) {
-        save(petRepository.findById(new String[]{petRequest.getOwnerId(), petRequest.getPetId()}).get(), petRequest);
+    public void processUpdateForm(@PathVariable("ownerId") String ownerId, @PathVariable("petId") String petId,
+        @RequestBody PetRequest petRequest) {
+        logger.info("Updating Pet for Owner: {}, Pet: {}", ownerId, petId);
+        save(petRepository.findById(new String[]{ownerId, petId}).get(), petRequest);
     }
 
     private void save(final Pet pet, final PetRequest petRequest) {

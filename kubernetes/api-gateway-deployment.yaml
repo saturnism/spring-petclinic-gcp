@@ -34,7 +34,7 @@ metadata:
     app: api-gateway
   name: api-gateway
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: api-gateway
@@ -64,7 +64,7 @@ spec:
             command:
             - curl
             - http://localhost:8080/actuator/health
-          initialDelaySeconds: 30
+          initialDelaySeconds: 15
         resources:
           requests:
             memory: 256m

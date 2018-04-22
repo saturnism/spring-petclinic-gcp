@@ -13,9 +13,7 @@
         <th class="hidden-sm hidden-xs">Address</th>
         <th>City</th>
         <th>Telephone</th>
-        <!--
-        <th class="hidden-xs">Pets</th>
-        -->
+        <th class="hidden-xs">Action</th>
     </tr>
     </thead>
 
@@ -31,5 +29,6 @@
         <!--
         <td class="hidden-xs"><span ng-repeat="pet in owner.pets track by pet.id">{{pet.name + ' '}}</span></td>
         -->
+        <td class="hidden-xs"><a href ng-click="$ctrl.deleteOwner(owner.id)">Delete</a></td>
     </tr>
 </table>

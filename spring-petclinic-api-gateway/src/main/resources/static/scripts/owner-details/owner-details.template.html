@@ -54,10 +54,9 @@
                     <td>{{visit.description}}</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="2">
+                        <a href ng-click="$ctrl.deletePet($ctrl.owner.id, pet.id)">Delete Pet</a>
                         <a ui-sref="petEdit({ownerId: $ctrl.owner.id, petId: pet.id})">Edit Pet</a>
-                    </td>
-                    <td>
                         <a ui-sref="visits({ownerId: $ctrl.owner.id, petId: pet.id})">Add Visit</a>
                     </td>
                 </tr>

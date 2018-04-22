@@ -64,6 +64,17 @@ class OwnerResource {
     }
 
     /**
+     * Delete an Owner
+     */
+    @DeleteMapping(value = "/{ownerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOwner(
+            @PathVariable("ownerId") String ownerId) {
+        logger.info("Deleting Owner ID: {}", ownerId);
+        ownerRepository.deleteById(ownerId);
+    }
+
+    /**
      * Read List of Owners
      */
     @GetMapping

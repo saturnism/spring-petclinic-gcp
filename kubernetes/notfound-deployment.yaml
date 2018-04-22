@@ -19,7 +19,7 @@ metadata:
     app: notfound-service
   name: notfound-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: notfound-service
