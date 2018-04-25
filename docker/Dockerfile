@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM openjdk:8u162-jre
 MAINTAINER Ray Tsang
 
 # Download Cloud Debugger and Cloud Profiler agents
