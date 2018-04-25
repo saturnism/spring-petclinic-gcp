@@ -254,7 +254,6 @@
                             </executions>
                             <configuration>
                                 <repository>${docker.image.prefix}/gcp-${project.artifactId}</repository>
-                                <pullNewerImage>true</pullNewerImage>
                                 <contextDirectory>${project.build.directory}/</contextDirectory>
 
                                 <buildArgs>
