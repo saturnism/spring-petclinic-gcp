@@ -52,8 +52,11 @@ spec:
           initialDelaySeconds: 20
         resources:
           requests:
-            memory: 256m
+            memory: 256Mi
             cpu: 200m
+          limits:
+            memory: 512Mi
+            cpu: 1000m
         volumeMounts:
         - name: credentials 
           mountPath: "/etc/credentials"
