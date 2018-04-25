@@ -31,7 +31,8 @@ spec:
       containers:
       - name: notfound-service
         image: gcr.io/google_containers/defaultbackend-amd64:1.4
-        requests:
+        resources:
+          requests:
             memory: 5Mi
             cpu: 100m
           limits:
