@@ -1,0 +1,19 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: petclinic
+spec:
+  acme:
+    server: https://acme-v01.api.letsencrypt.org/directory
+    email: saturnism@gmail.com
+    privateKeySecretRef:
+      name: istio-ingress-letsencrypt
+    dns01:
+      providers:
+      - name: petclinic
+        clouddns:
+          project: kubernetes-monitoring-demo
+          serviceAccountSecretRef:
+            name: petclinic-cert-manager-sa
+            key: petclinic-cert-manager.json
+

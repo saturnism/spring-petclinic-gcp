@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: petclinic
+  namespace: default
+spec:
+  secretName: petclinic-tls
+  issuerRef:
+    name: petclinic
+  commonName: petclinic-demo.gcp.community
+  dnsNames:
+  - petclinic-demo.gcp.community
+  acme:
+    config:
+    - dns01:
+        provider: petclinic
+      domains:
+      - petclinic-demo.gcp.community
