@@ -4,23 +4,12 @@ spring:
       probability: 1.0
     web:
       additional-skip-pattern: /actuator/.*
-zuul:
-  prefix: /api
-  ignoredServices: '*'
-  routes:
-    vets-service: /vet/**
-    visits-service: /visit/**
-    customers-service: /customer/**
-    api-gateway: /gateway/**
+  cloud:
+    gcp:
+      logging:
+        trace-id-extractor: ZIPKIN
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-  metrics:
-    distribution:
-      percentiles-histogram[http.server.requests]: true
-      sla:
-        http:
-          server:
-            requests: 1ms, 5ms
