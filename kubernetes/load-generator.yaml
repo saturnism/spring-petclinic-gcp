@@ -14,4 +14,4 @@ spec:
       containers:
       - name: load-generator
         image: saturnism/hey:1
-        args: ["-cpus", "2", "-z", "1m", "-c", "10", "-q", "10", "-m", "GET", "-H", "X-B3-SAMPLED: 0", "http://api-gateway:8080/owners/1"]
+        args: ["-cpus", "2", "-z", "5m", "-c", "10", "-q", "10", "-m", "GET", "-H", "X-B3-SAMPLED: 0", "http://api-gateway:8080/owners/1"]
