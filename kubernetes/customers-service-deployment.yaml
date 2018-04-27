@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app: customers-service
+    visualize: 'true'
   name: customers-service
 spec:
   ports:
@@ -17,12 +18,14 @@ kind: Deployment
 metadata:
   labels:
     app: customers-service
+    visualize: 'true'
   name: customers-service
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: customers-service
+      visualize: 'true'
   template:
     metadata:
       annotations:
@@ -31,6 +34,7 @@ spec:
         prometheus.io/port: '8080'
       labels:
         app: customers-service
+        visualize: 'true'
     spec:
       volumes:
       - name: credentials

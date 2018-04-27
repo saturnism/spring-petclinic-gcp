@@ -17,6 +17,7 @@ kind: Service
 metadata:
   labels:
     app: api-gateway
+    visualize: 'true'
   name: api-gateway
 spec:
   ports:
@@ -32,12 +33,14 @@ kind: Deployment
 metadata:
   labels:
     app: api-gateway
+    visualize: 'true'
   name: api-gateway
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: api-gateway
+      visualize: 'true'
   template:
     metadata:
       annotations:
@@ -46,6 +49,9 @@ spec:
         prometheus.io/port: '8080'
       labels:
         app: api-gateway
+        visualize: 'true'
+      annotations:
+        visualizer/uses: customers-service,visits-service,vets-service
     spec:
       volumes:
       - name: credentials
