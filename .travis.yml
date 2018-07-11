@@ -32,7 +32,7 @@ before_install:
 - export TRIGGER_PATTERNS_BUILD_ALL="^pom\.xml|^\.travis\.yml"
 - export TRIGGER_PATTERNS_MODULES="^spring-petclinic-"
 - export TRIGGER_PATTERNS_KUBERNETES="^kubernetes/.*\.yaml"
-- export TRIGGER_PATTERNS_ISTIO="^istio/.*\.yaml"
+# - export TRIGGER_PATTERNS_ISTIO="^istio/.*\.yaml"
 - shopt -s expand_aliases
 - alias cl="git diff --name-only $TRAVIS_COMMIT_RANGE"
 - if cl | grep -q -E -e "$TRIGGER_PATTERNS_BUILD_ALL" -e "$TRIGGER_PATTERNS_MODULES"; then
@@ -79,10 +79,10 @@ script:
   else
     echo "Skipping Kubernetes Deployment";
   fi
-- |
-  if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_ISTIO"; then
-    echo "Deploying to Istio";
-    kubectl apply -f istio/
-  else
-    echo "Skipping Istio Deployment";
-  fi
+#- |
+#  if cl | grep -v "$TRIGGER_PATTERNS_IGNORE" | grep -q -E "$TRIGGER_PATTERNS_ISTIO"; then
+#    echo "Deploying to Istio";
+#    kubectl apply -f istio/
+#  else
+#    echo "Skipping Istio Deployment";
+#  fi
