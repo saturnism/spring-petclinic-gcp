@@ -11,7 +11,12 @@ spring:
         database: petclinic
       logging:
         trace-id-extractor: ZIPKIN
+server:
+  servlet:
+    context-path: /api/vet
 management:
+  server:
+    port: 8081
   endpoints:
     web:
       exposure:

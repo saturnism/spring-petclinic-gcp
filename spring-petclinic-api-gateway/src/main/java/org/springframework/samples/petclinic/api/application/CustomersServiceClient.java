@@ -37,9 +37,9 @@ public class CustomersServiceClient {
     private final RestTemplate restTemplate;
 
     public OwnerDetails getOwner(final String ownerId) {
-        OwnerDetails owner = restTemplate.getForObject("http://customers-service:8080/owners/{ownerId}", OwnerDetails.class, ownerId);
+        OwnerDetails owner = restTemplate.getForObject("http://customers-service:8080/api/customer/owners/{ownerId}", OwnerDetails.class, ownerId);
 
-        ResponseEntity<List<PetDetails>> petsResponse = restTemplate.exchange("http://customers-service:8080/owners/{ownerId}/pets",
+        ResponseEntity<List<PetDetails>> petsResponse = restTemplate.exchange("http://customers-service:8080/api/customer/owners/{ownerId}/pets",
                 HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<List<PetDetails>>() {},
                 ownerId);

@@ -38,7 +38,6 @@ before_install:
 - if cl | grep -q -E -e "$TRIGGER_PATTERNS_BUILD_ALL" -e "$TRIGGER_PATTERNS_MODULES"; then
     git clone https://github.com/saturnism/spring-cloud-gcp.git $HOME/spring-cloud-gcp;
     pushd $HOME/spring-cloud-gcp;
-    git checkout 128-bit-trace-id;
     ./mvnw -DskipTests=true -Dmaven.javadoc.skip=true install;
     popd;
   fi

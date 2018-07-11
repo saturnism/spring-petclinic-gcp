@@ -24,13 +24,13 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <!-- BOMs -->
-        <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
-        <sleuth.version>2.0.0.M9</sleuth.version>
-        <spring-cloud.version>Finchley.M9</spring-cloud.version>
+        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <sleuth.version>2.0.0.RELEASE</sleuth.version>
         <!--
         <spring-cloud-gcp.version>1.0.0.M3</spring-cloud-gcp.version>
         -->
-        <spring-cloud-gcp.version>1.0.0.BUILD-SNAPSHOT</spring-cloud-gcp.version>
+        <spring-cloud-gcp.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-gcp.version>
 
         <!-- Library versions -->
         <assertj.version>3.9.0</assertj.version>
@@ -103,6 +103,14 @@
             <id>spring-milestone</id>
             <name>Spring Milestone Repository</name>
             <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+            <id>spring-snapshot</id>
+            <name>Spring Snapshot Repository</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 

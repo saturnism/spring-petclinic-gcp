@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.samples.petclinic.visits.model.Visit;
 import org.springframework.samples.petclinic.visits.model.VisitRepository;
@@ -32,7 +31,6 @@ import java.util.Date;
  * @author Maciej Szarlinski
  * @author Ray Tsang
  */
-@EnableDiscoveryClient
 @SpringBootApplication
 public class VisitsServiceApplication {
     private static final Logger logger = LoggerFactory.getLogger(VisitsServiceApplication.class);

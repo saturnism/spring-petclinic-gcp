@@ -45,7 +45,7 @@ public class ApiGatewayController {
 
     private final VisitsServiceClient visitsServiceClient;
 
-    @GetMapping(value = "owners/{ownerId}")
+    @GetMapping(value = "/api/gateway/owners/{ownerId}")
     public OwnerDetails getOwnerDetails(final @PathVariable String ownerId) {
         logger.info("Getting Owner: {}", ownerId);
         final OwnerDetails owner = customersServiceClient.getOwner(ownerId);

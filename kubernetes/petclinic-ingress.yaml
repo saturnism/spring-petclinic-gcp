@@ -10,18 +10,6 @@ spec:
       paths:
       - path: /.*
         backend:
-          serviceName: petclinic
-          servicePort: 8080
-      - path: /actuator.*
-        backend:
-          serviceName: notfound-service
-          servicePort: 8080
-      - path: /actuator/health
-        backend:
-          serviceName: petclinic
-          servicePort: 8080
-      - path: /api/gateway/.*
-        backend:
           serviceName: api-gateway
           servicePort: 8080
       - path: /api/customer/.*

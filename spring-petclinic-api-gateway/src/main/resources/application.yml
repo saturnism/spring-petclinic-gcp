@@ -9,6 +9,8 @@ spring:
       logging:
         trace-id-extractor: ZIPKIN
 management:
+  server:
+    port: 8081
   endpoints:
     web:
       exposure:

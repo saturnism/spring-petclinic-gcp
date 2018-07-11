@@ -40,15 +40,25 @@ Use `gcloud` to provision a multi-zone Kubernetes Engine cluster.
 
 ```
 $ gcloud services enable compute.googleapis.com container.googleapis.com
-$ CLOUDSDK_CONTAINER_USE_V1_API_CLIENT=false
-$ gcloud container clusters create petclinic-cluster \
-    --cluster-version=1.9.6 \
+$ gcloud beta container clusters create petclinic-cluster \
+    --cluster-version=1.10.2 \
     --region=us-central1 \
     --num-nodes=2 \
     --machine-type=n1-standard-2 \
     --enable-autorepair \
-    --no-enable-cloud-logging \
-    --no-enable-cloud-monitoring
+    --enable-stackdriver-kubernetes
+```
+
+## Stackdriver Prometheus Scraper
+Install Prometheus scraper to propagate Prometheus metrics to Stackdriver Monitoring.
+
+```
+$ kubectl apply -f https://storage.googleapis.com/stackdriver-prometheus-documentation/rbac-setup.yml --as=admin --as-group=system:masters
+$ curl -s https://storage.googleapis.com/stackdriver-prometheus-documentation/prometheus-service.yml | \
+  sed -e "s/\(\s*_kubernetes_cluster_name*\).*/\1 'petclinic-cluster'/g" | \
+  sed -e "s/\(\s*_kubernetes_location:*\).*/\1 'us-central1'/g" | \
+  sed -e "s/\(\s*_stackdriver_project_id:*\).*/\1 '${PROJECT_ID}'/g" | \
+  kubectl apply -f -
 ```
 
 ## Istio
@@ -57,7 +67,7 @@ Install the basics:
 $ ISTIO_VERSION=0.7.1
 $ curl -L https://git.io/getLatestIstio | sh -
 $ cd istio-$ISTIO_VERSION
-$ kubectl apply -f install/kubernetes/istio.yaml --as=admin --as-group=system:masters
+$ kubectl apply -f install/kubernetes/istio-auth.yaml --as=admin --as-group=system:masters
 ```
 
 Update Sidecar Injector to limit Istio to 10.0.0.0/8 network:
@@ -147,12 +157,12 @@ $ mvn install
 ### Build Docker Images
 Build all images:
 ```
-$ mvn package install -PbuildDocker
+$ ./mvnw package install -PbuildDocker
 ```
 
 Build just one image:
 ```
-$ mvn package install -PbuildDocker -pl spring-petclinic-customers-service
+$ ./mvnw package install -PbuildDocker -pl spring-petclinic-customers-service
 ```
 
 ## Run
@@ -177,12 +187,16 @@ Deploy Application:
 $ kubectl apply -f kubernetes/
 ```
 
-Deploy Route Rules:
+### Try It Out
+Find the Ingress IP address
 ```
-$ kubectl apply -f istio/
+$ kubectl get ingress
+petclinic-ingress   *         X.X.X.X   80        
 ```
 
-### Travis CI/CD
+Open the browser to see if the app is working!
+
+## Travis CI/CD
 Install the Travis CLI:
 ```
 $ brew install travis

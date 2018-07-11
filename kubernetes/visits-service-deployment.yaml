@@ -5,11 +5,16 @@ metadata:
     app: visits-service
     visualize: 'true'
   name: visits-service
+#  annotations:
+#    auth.istio.io/8081: NONE
 spec:
   ports:
   - name: http
     port: 8080
     targetPort: 8080
+#  - name: http-management
+#    port: 8081
+#    targetPort: 8081
   selector:
     app: visits-service
 ---
@@ -31,7 +36,7 @@ spec:
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/path: '/actuator/prometheus'
-        prometheus.io/port: '8080'
+        prometheus.io/port: '8081'
       labels:
         app: visits-service
         visualize: 'true'
@@ -47,13 +52,13 @@ spec:
           exec:
             command:
             - curl
-            - http://localhost:8080/actuator/info
+            - http://localhost:8081/actuator/info
         livenessProbe:
           exec:
             command:
             - curl
-            - http://localhost:8080/actuator/health
-          initialDelaySeconds: 20
+            - http://localhost:8081/actuator/health
+          initialDelaySeconds: 60
         resources:
           requests:
             memory: 256Mi
@@ -73,3 +78,5 @@ spec:
         ports:
         - name: http
           containerPort: 8080
+#        - name: http-management
+#          containerPort: 8081

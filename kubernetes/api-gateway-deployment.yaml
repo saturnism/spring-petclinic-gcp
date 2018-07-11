@@ -3,30 +3,20 @@ kind: Service
 metadata:
   labels:
     app: petclinic
-  name: petclinic
-spec:
-  ports:
-  - name: http
-    port: 8080
-    targetPort: 8080
-  selector:
-    app: api-gateway
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: api-gateway
     visualize: 'true'
-  name: api-gateway
+  name: petclinic
+#  annotations:
+#    auth.istio.io/8081: NONE
 spec:
   ports:
   - name: http
     port: 8080
     targetPort: 8080
+#  - name: http-management
+#    port: 8081
+#    targetPort: 8081
   selector:
     app: api-gateway
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,12 +36,11 @@ spec:
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/path: '/actuator/prometheus'
-        prometheus.io/port: '8080'
+        prometheus.io/port: '8081'
+        visualizer/uses: customers-service,visits-service,vets-service
       labels:
         app: api-gateway
         visualize: 'true'
-      annotations:
-        visualizer/uses: customers-service,visits-service,vets-service
     spec:
       volumes:
       - name: credentials
@@ -64,13 +53,13 @@ spec:
           exec:
             command:
             - curl
-            - http://localhost:8080/actuator/info
+            - http://localhost:8081/actuator/info
         livenessProbe:
           exec:
             command:
             - curl
-            - http://localhost:8080/actuator/health
-          initialDelaySeconds: 20
+            - http://localhost:8081/actuator/health
+          initialDelaySeconds: 60
         resources:
           requests:
             memory: 256Mi
@@ -90,3 +79,5 @@ spec:
         ports:
         - name: http
           containerPort: 8080
+#        - name: http-management
+#          containerPort: 8081
