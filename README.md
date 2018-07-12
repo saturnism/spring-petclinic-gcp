@@ -64,48 +64,11 @@ $ curl -s https://storage.googleapis.com/stackdriver-prometheus-documentation/pr
 ## Istio
 Install the basics:
 ```
+$ cd ~/
 $ export ISTIO_VERSION=0.7.1
 $ curl -L https://git.io/getLatestIstio | sh -
 $ cd istio-$ISTIO_VERSION
-$ kubectl apply -f install/kubernetes/istio-auth.yaml --as=admin --as-group=system:masters
-```
-
-Update Sidecar Injector to limit Istio to 10.0.0.0/8 network:
-1. Open `install/kubernetes/istio-sidecar-injector-configmap-release.yaml`
-1. Update the `initContainers` `args` block:
-```
-...
-      initContainers:
-      - name: istio-init
-        image: docker.io/istio/proxy_init:0.7.1
-        args:
-        - "-p"
-        - {{ .MeshConfig.ProxyListenPort }}
-        - "-u"
-        - 1337
-        # ADD THE FOLLOWING LINES
-        - -i
-        - 10.0.0.0/8
-        # ADD THE ABOVE LINES
-...
-```
-
-Install Sidecar Injector:
-```
-$ install/kubernetes/webhook-create-signed-cert.sh \
-    --service istio-sidecar-injector \
-    --namespace istio-system \
-    --secret sidecar-injector-certs
-$ kubectl apply -f install/kubernetes/istio-sidecar-injector-configmap-release.yaml
-$ cat install/kubernetes/istio-sidecar-injector.yaml | \
-     ./install/kubernetes/webhook-patch-ca-bundle.sh > \
-     install/kubernetes/istio-sidecar-injector-with-ca-bundle.yaml
-$ kubectl apply -f install/kubernetes/istio-sidecar-injector-with-ca-bundle.yaml
-```
-
-Enable Sidecar Injector on `default` namespace:
-```
-$ kubectl label namespace default istio-injection=enabled
+$ kubectl apply -f install/kubernetes/istio.yaml --as=admin --as-group=system:masters
 ```
 
 ## Spanner
