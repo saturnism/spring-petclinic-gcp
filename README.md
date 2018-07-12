@@ -64,7 +64,7 @@ $ curl -s https://storage.googleapis.com/stackdriver-prometheus-documentation/pr
 ## Istio
 Install the basics:
 ```
-$ ISTIO_VERSION=0.7.1
+$ export ISTIO_VERSION=0.7.1
 $ curl -L https://git.io/getLatestIstio | sh -
 $ cd istio-$ISTIO_VERSION
 $ kubectl apply -f install/kubernetes/istio-auth.yaml --as=admin --as-group=system:masters
