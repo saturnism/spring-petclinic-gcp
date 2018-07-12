@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: load-generator
+  name: load-generator
+spec:
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: load-generator
+    spec:
+      containers:
+      - name: load-generator
+        image: saturnism/hey:1
+        args: ["-cpus", "2", "-z", "5m", "-c", "10", "-q", "10", "-m", "GET", "-H", "X-B3-SAMPLED: 0", "http://api-gateway:8080/owners/1"]

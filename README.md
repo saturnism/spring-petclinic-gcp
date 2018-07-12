@@ -41,7 +41,7 @@ Use `gcloud` to provision a multi-zone Kubernetes Engine cluster.
 ```
 $ gcloud services enable compute.googleapis.com container.googleapis.com
 $ gcloud beta container clusters create petclinic-cluster \
-    --cluster-version=1.10.2 \
+    --cluster-version=1.10.5 \
     --region=us-central1 \
     --num-nodes=2 \
     --machine-type=n1-standard-2 \

@@ -8,6 +8,7 @@ metadata:
 #  annotations:
 #    auth.istio.io/8081: NONE
 spec:
+  type: NodePort
   ports:
   - name: http
     port: 8080
