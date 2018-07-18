@@ -55,7 +55,7 @@ Install Prometheus scraper to propagate Prometheus metrics to Stackdriver Monito
 ```
 $ kubectl apply -f https://storage.googleapis.com/stackdriver-prometheus-documentation/rbac-setup.yml --as=admin --as-group=system:masters
 $ curl -s https://storage.googleapis.com/stackdriver-prometheus-documentation/prometheus-service.yml | \
-  sed -e "s/\(\s*_kubernetes_cluster_name*\).*/\1 'petclinic-cluster'/g" | \
+  sed -e "s/\(\s*_kubernetes_cluster_name:*\).*/\1 'petclinic-cluster'/g" | \
   sed -e "s/\(\s*_kubernetes_location:*\).*/\1 'us-central1'/g" | \
   sed -e "s/\(\s*_stackdriver_project_id:*\).*/\1 '${PROJECT_ID}'/g" | \
   kubectl apply -f -
