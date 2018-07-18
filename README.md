@@ -114,7 +114,7 @@ $ gcloud iam service-accounts keys create ~/petclinic-service-account.json \
 ## Build
 ### Compile and Install to Maven
 ```
-$ mvn install
+$ ./mvnw install
 ```
 
 ### Build Docker Images
