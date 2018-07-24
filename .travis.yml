@@ -35,15 +35,8 @@ before_install:
 # - export TRIGGER_PATTERNS_ISTIO="^istio/.*\.yaml"
 - shopt -s expand_aliases
 - alias cl="git diff --name-only $TRAVIS_COMMIT_RANGE"
-- if cl | grep -q -E -e "$TRIGGER_PATTERNS_BUILD_ALL" -e "$TRIGGER_PATTERNS_MODULES"; then
-    git clone https://github.com/saturnism/spring-cloud-gcp.git $HOME/spring-cloud-gcp;
-    pushd $HOME/spring-cloud-gcp;
-    ./mvnw -DskipTests=true -Dmaven.javadoc.skip=true install;
-    popd;
-  fi
 
 script:
-- echo "Build Spring Cloud GCP Snapshot"
 - echo "Changed Files:" && cl
 - |
   if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then

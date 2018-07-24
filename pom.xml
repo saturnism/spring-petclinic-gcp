@@ -27,10 +27,7 @@
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
         <sleuth.version>2.0.0.RELEASE</sleuth.version>
-        <!--
-        <spring-cloud-gcp.version>1.0.0.M3</spring-cloud-gcp.version>
-        -->
-        <spring-cloud-gcp.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-gcp.version>
+        <spring-cloud-gcp.version>1.1.0.M1</spring-cloud-gcp.version>
 
         <!-- Library versions -->
         <assertj.version>3.9.0</assertj.version>
