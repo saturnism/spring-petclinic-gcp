@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.api;
 
+import brave.propagation.B3Propagation;
+import brave.propagation.Propagation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -34,5 +36,10 @@ public class ApiGatewayApplication {
     @Bean
     RestTemplate loadBalancedRestTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    Propagation.Factory propagtaion() {
+        return B3Propagation.FACTORY;
     }
 }
