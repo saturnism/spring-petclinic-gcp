@@ -26,7 +26,6 @@
         <!-- BOMs -->
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-        <sleuth.version>2.0.0.RELEASE</sleuth.version>
         <spring-cloud-gcp.version>1.1.0.M1</spring-cloud-gcp.version>
 
         <!-- Library versions -->
@@ -54,13 +53,6 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-sleuth-dependencies</artifactId>
-                <type>pom</type>
-                <scope>import</scope>
-                <version>${sleuth.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -100,14 +92,6 @@
             <id>spring-milestone</id>
             <name>Spring Milestone Repository</name>
             <url>https://repo.spring.io/milestone</url>
-        </repository>
-        <repository>
-            <id>spring-snapshot</id>
-            <name>Spring Snapshot Repository</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
     </repositories>
 
