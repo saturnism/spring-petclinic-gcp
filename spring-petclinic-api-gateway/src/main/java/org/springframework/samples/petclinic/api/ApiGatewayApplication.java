@@ -38,10 +38,4 @@ public class ApiGatewayApplication {
     RestTemplate loadBalancedRestTemplate() {
         return new RestTemplate();
     }
-
-    @Bean
-    @Primary
-    Propagation.Factory stackdriverPropagation() {
-        return B3Propagation.FACTORY;
-    }
 }
