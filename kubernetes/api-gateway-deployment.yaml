@@ -5,16 +5,14 @@ metadata:
     app: api-gateway
     visualize: 'true'
   name: api-gateway
-#  annotations:
-#    auth.istio.io/8081: NONE
 spec:
   ports:
   - name: http
     port: 8080
     targetPort: 8080
-#  - name: http-management
-#    port: 8081
-#    targetPort: 8081
+  - name: http-management
+    port: 8081
+    targetPort: 8081
   selector:
     app: api-gateway
 ---
