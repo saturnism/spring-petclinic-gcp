@@ -75,7 +75,7 @@ $ kubectl apply -f install/kubernetes/istio.yaml --as=admin --as-group=system:ma
 ```
 $ gcloud spanner instances create petclinic --config=regional-us-central1 --nodes=1 --description="PetClinic Spanner Instance"
 $ gcloud spanner databases create petclinic --instance=petclinic
-$ gcloud spanner databases ddl update petclinic --instance=petclinic --ddl="$(<petclinic/db/spanner.ddl)"
+$ gcloud spanner databases ddl update petclinic --instance=petclinic --ddl="$(<db/spanner.ddl)"
 ```
 
 ## Debugging and Profiling
