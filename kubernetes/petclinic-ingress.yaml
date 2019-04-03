@@ -8,10 +8,6 @@ spec:
   rules:
   - http:
       paths:
-      - path: /.*
-        backend:
-          serviceName: api-gateway
-          servicePort: 8080
       - path: /api/customer/.*
         backend:
           serviceName: customers-service
@@ -23,4 +19,8 @@ spec:
       - path: /api/visit/.*
         backend:
           serviceName: visits-service
+          servicePort: 8080
+      - path: /.*
+        backend:
+          serviceName: api-gateway
           servicePort: 8080
