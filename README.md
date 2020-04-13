@@ -41,9 +41,10 @@ Use `gcloud` to provision a multi-zone Kubernetes Engine cluster.
 ```
 $ gcloud services enable compute.googleapis.com container.googleapis.com
 $ gcloud beta container clusters create petclinic-cluster \
-    --cluster-version=1.10.5 \
+    --cluster-version=1.15.11-gke.3 \
     --region=us-central1 \
-    --num-nodes=2 \
+    --addons Istio --istio-config=auth=MTLS_PERMISSIVE \
+    --num-nodes=3 \
     --machine-type=n1-standard-2 \
     --enable-autorepair \
     --enable-stackdriver-kubernetes
@@ -61,15 +62,20 @@ $ curl -s https://storage.googleapis.com/stackdriver-prometheus-documentation/pr
   kubectl apply -f -
 ```
 
-## Istio
-Install the basics:
+Since we installed [Istio](https://istio.io) with our cluster, we will want to enable side car injection.
+
+```bash
+kubectl label namespace default istio-injection=enabled
 ```
-$ cd ~/
-$ export ISTIO_VERSION=0.7.1
-$ curl -L https://git.io/getLatestIstio | sh -
-$ cd istio-$ISTIO_VERSION
-$ kubectl apply -f install/kubernetes/istio.yaml --as=admin --as-group=system:masters
+
+We will also want to set the proper cluster permissions
+
+```bash
+kubectl create clusterrolebinding cluster-admin-binding \
+--clusterrole=cluster-admin \
+--user="$(gcloud config get-value core/account)"
 ```
+
 
 ## Spanner
 ```
@@ -152,9 +158,9 @@ $ kubectl apply -f kubernetes/
 
 ### Try It Out
 Find the Ingress IP address
-```
-$ kubectl get ingress
-petclinic-ingress   *         X.X.X.X   80        
+```bash
+kubectl get svc istio-ingressgateway -n istio-system
+NAME                   TYPE           CLUSTER-IP EXTERNAL-IP                                                                                                                              istio-ingressgateway   LoadBalancer   X.X.X.X   <Your IP>
 ```
 
 Open the browser to see if the app is working!

@@ -1,0 +1,90 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: petclinic-gateway
+spec:
+  selector:
+        istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: frontend
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - petclinic-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /.*
+    route:
+    - destination:
+        host: api-gateway
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: customer
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - petclinic-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/customer/.*
+    route:
+    - destination:
+        host: customers-service
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vets
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - petclinic-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/vet/.*
+    route:
+    - destination:
+        host: vets-service
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: visits
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - petclinic-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/visit/.*
+    route:
+    - destination:
+        host: visits-service
+        port:
+          number: 8080
